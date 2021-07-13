@@ -6,8 +6,11 @@ import {Login} from './pages/Login';
 import './App.css';
 import {RecoilRoot} from 'recoil';
 import {QueryClient, QueryClientProvider} from 'react-query';
+import axios from 'axios';
+import {baseUrl} from "./config/webservice";
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient();
+axios.defaults.baseURL = baseUrl;
 
 const App: FC = () => (
   <RecoilRoot>

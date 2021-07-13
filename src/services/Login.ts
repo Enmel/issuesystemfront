@@ -1,5 +1,4 @@
 import axios, {AxiosResponse} from 'axios';
-import {baseUrl} from "../config/webservice"
 
 export type Auth = {
     email:string
@@ -7,9 +6,11 @@ export type Auth = {
 }
 
 export type User = {
+    id: number,
     name: string,
     email: string,
     picture_url: string,
+    password: string,
     role: string
 }
 
@@ -20,7 +21,7 @@ export type SessionData = {
 }
 
 const authenticate = async (params:Auth): Promise<AxiosResponse<SessionData>> => {
-    return axios.post<SessionData>(baseUrl + '/users/authenticate', params);
+    return axios.post<SessionData>('/users/authenticate', params);
 }
 
 export {authenticate};
