@@ -1,13 +1,10 @@
 import React from 'react';
 import { Button, Table, Input, Row, Col, Tooltip,  Drawer, Form, Select, Popconfirm, Spin, message} from 'antd';
 import { DeleteFilled, EditFilled, UserAddOutlined } from '@ant-design/icons';
-import { useAuth } from '../../hooks/useAuth';
-import {UserParams} from "../../services/Users"
-import { useGetUsers} from './hooks/useUserList';
-import { useAddUser } from './hooks/useAddUser';
-import { useUpdateUser } from './hooks/useUpdateUser';
-import { useRemoveUser } from './hooks/useRemoveUser';
-import { User} from "../../services/Login";
+import { useAuth } from '@/hooks/useAuth';
+import {UserParams} from "@/services/Users"
+import { useGetUsers, useAddUser, useUpdateUser, useRemoveUser } from "./hooks";
+import { User} from "@/services/Login";
 
 
 const Users: React.FC = () => {
