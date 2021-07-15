@@ -1,10 +1,10 @@
 import React from 'react';
 import { Button, Table, Input, Row, Col, Tooltip,  Drawer, Form, Select, Popconfirm, Spin, message} from 'antd';
 import { DeleteFilled, EditFilled, UserAddOutlined } from '@ant-design/icons';
-import { useAuth } from '@/hooks/useAuth';
-import {UserParams} from "@/services/Users"
+import { useAuth } from '@hooks/useAuth';
+import { UserParams } from "@services/Users"
 import { useGetUsers, useAddUser, useUpdateUser, useRemoveUser } from "./hooks";
-import { User} from "@/services/Login";
+import { User} from "@services/Login";
 
 
 const Users: React.FC = () => {
@@ -26,11 +26,7 @@ const Users: React.FC = () => {
 
     const [drawerConfig, setDrawerConfig] = React.useState(drawerConfigCreate);
 
-    const {
-        isLoading,
-        data,
-        isFetching
-    } = useGetUsers(email);
+    const { isLoading, data, isFetching } = useGetUsers(email);
 
     const addUser = useAddUser();
     const updateUser = useUpdateUser();

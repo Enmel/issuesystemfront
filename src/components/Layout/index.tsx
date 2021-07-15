@@ -13,10 +13,11 @@ import {
   Route,
   Link
 } from "react-router-dom";
-import { Bugs } from "@pages/Bugs";
 import { Users } from "@pages/Users";
+import { Groups } from "@pages/Groups";
+import { Bugs } from "@pages/Bugs";
 import { Dashboard } from "@pages/Dashboard";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "@hooks/useAuth";
 
 const { Text } = Typography;
 const { Content, Footer, Sider } = Layout;
@@ -77,8 +78,9 @@ const LayoutPage: FC = () => {
         <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
           <div className="site-layout-background" style={{ padding: 24, textAlign: 'center' }}>
             <Switch>
-              <Route path="/a/bugs" component={Bugs}/>
               <Route path="/a/users" component={Users}/>
+              <Route path="/a/groups" component={Groups}/>
+              <Route path="/a/bugs" component={Bugs}/>
               <Route path="/a" component={Dashboard}/>
             </Switch>
           </div>
