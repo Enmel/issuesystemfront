@@ -1,8 +1,9 @@
 import React from 'react';
 import { Button, List, Avatar, Input, Row, Col, Tooltip,  Drawer, Form, Popconfirm, Spin, message} from 'antd';
-import { DeleteFilled, EditFilled, UsergroupAddOutlined } from '@ant-design/icons';
+import { DeleteFilled, EditFilled, UsergroupAddOutlined, TeamOutlined } from '@ant-design/icons';
 import { UploadAvatar } from './components/UploadAvatar';
-import { Group, GroupToSave } from "@services/Groups"
+import { Group, GroupToSave } from "@services/Groups";
+import { Link } from "react-router-dom";
 import { useList, useAdd, useUpdateUser, useRemoveUser } from "./hooks";
 
 const Groups: React.FC = () => {
@@ -121,6 +122,9 @@ const Groups: React.FC = () => {
                         <List.Item
                           actions={
                             [
+                              <Link to={"/a/groups/" + record.id}>
+                                <Button type="text" icon={<TeamOutlined/>}/>
+                              </Link>,
                               <Button
                                 type="text"
                                 icon={<EditFilled />}
@@ -134,7 +138,7 @@ const Groups: React.FC = () => {
                         >
                           <List.Item.Meta
                             avatar={<Avatar src={record.picture?.url ?? ""} />}
-                            title={<a href="https://ant.design">{record.name}</a>}
+                            title={<Link to={"/a/groups/" + record.id}> {record.name} </Link>}
                             description={record.description}
                           />
                         </List.Item>

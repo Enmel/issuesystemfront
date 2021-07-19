@@ -15,6 +15,7 @@ import {
 } from "react-router-dom";
 import { Users } from "@pages/Users";
 import { Groups } from "@pages/Groups";
+import { Members } from "@pages/Members";
 import { Bugs } from "@pages/Bugs";
 import { Dashboard } from "@pages/Dashboard";
 import { useAuth } from "@hooks/useAuth";
@@ -79,6 +80,7 @@ const LayoutPage: FC = () => {
           <div className="site-layout-background" style={{ padding: 24, textAlign: 'center' }}>
             <Switch>
               <Route path="/a/users" component={Users}/>
+              <Route path="/a/groups/:id" component={Members}/>
               <Route path="/a/groups" component={Groups}/>
               <Route path="/a/bugs" component={Bugs}/>
               <Route path="/a" component={Dashboard}/>

@@ -9,3 +9,10 @@ export const useGetUsers = (email: string) => useQuery(['users', email], () => {
         return data; 
     });
 }, { keepPreviousData : true });
+
+export const useGetUsersWithFilter = (param : number[]) => useQuery(['users', param], () => {
+    return getUsers({params: {email: ""}})
+    .then(({data}) : User[] => {
+        return data.filter((user) => !param.includes(user.id)) 
+    });
+});
