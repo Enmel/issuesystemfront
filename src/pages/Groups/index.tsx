@@ -103,11 +103,11 @@ const Groups: React.FC = () => {
                         <Tooltip title="Crear grupo">
                             <Button 
                                 type="primary"
-                                shape="circle"
                                 onClick={showDrawerCreate} 
                                 icon={<UsergroupAddOutlined className="standar-icon"/>}
                                 disabled={addGroup.isLoading || updateGroup.isLoading }
                             >
+                              Agregar
                             </Button>
                         </Tooltip>
                     </Col>

@@ -147,11 +147,11 @@ const Users: React.FC = () => {
                         <Tooltip title="Agregar usuario">
                             <Button 
                                 type="primary"
-                                shape="circle"
                                 onClick={showDrawerCreate} 
                                 icon={<UserAddOutlined className="standar-icon"/>}
                                 disabled={addUser.isLoading || updateUser.isLoading }
                             >
+                              Agregar
                             </Button>
                         </Tooltip>
                     </Col>

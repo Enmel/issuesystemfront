@@ -14,6 +14,8 @@ import {
   Link
 } from "react-router-dom";
 import { Users } from "@pages/Users";
+import { Issues } from "@pages/Issues";
+import { IssueDetail } from "@pages/IssueDetail";
 import { Groups } from "@pages/Groups";
 import { Members } from "@pages/Members";
 import { Bugs } from "@pages/Bugs";
@@ -79,11 +81,13 @@ const LayoutPage: FC = () => {
         <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
           <div className="site-layout-background" style={{ padding: 24, textAlign: 'center' }}>
             <Switch>
-              <Route path="/a/users" component={Users}/>
-              <Route path="/a/groups/:id" component={Members}/>
-              <Route path="/a/groups" component={Groups}/>
-              <Route path="/a/bugs" component={Bugs}/>
-              <Route path="/a" component={Dashboard}/>
+              <Route exact path="/a/users" component={Users}/>
+              <Route exact path="/a/issues/:id" component={IssueDetail}/>
+              <Route exact path="/a/issues" component={Issues}/>
+              <Route exact path="/a/groups/:id" component={Members}/>
+              <Route exact path="/a/groups" component={Groups}/>
+              <Route exact path="/a/bugs" component={Bugs}/>
+              <Route exact path="/a" component={Dashboard}/>
             </Switch>
           </div>
         </Content>
