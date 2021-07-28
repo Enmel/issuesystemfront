@@ -14,7 +14,7 @@ const Login: FC = () => {
             email: values.email,
             password: values.password
         }, () => {
-            history.replace("/a");
+            history.replace("/a/issues");
         });
     };
     

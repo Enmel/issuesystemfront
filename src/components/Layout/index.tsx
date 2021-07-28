@@ -11,14 +11,15 @@ import {
 import {
   Switch,
   Route,
-  Link
+  Link,
+  NavLink
 } from "react-router-dom";
 import { Users } from "@pages/Users";
 import { Issues } from "@pages/Issues";
 import { IssueDetail } from "@pages/IssueDetail";
 import { Groups } from "@pages/Groups";
 import { Members } from "@pages/Members";
-import { Bugs } from "@pages/Bugs";
+import { Errors } from "@pages/Errors";
 import { Dashboard } from "@pages/Dashboard";
 import { useAuth } from "@hooks/useAuth";
 
@@ -51,24 +52,24 @@ const LayoutPage: FC = () => {
 
         <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
           <Menu.Item key="1" icon={<UserOutlined />}>
-            <Link to="/a/users">
+            <NavLink to="/a/users">
               <span>Usuarios</span>
-            </Link>
+            </NavLink>
           </Menu.Item>
           <Menu.Item key="2" icon={<TeamOutlined />}>
-            <Link to="/a/groups">
+            <NavLink to="/a/groups">
               <span>Grupos</span>
-            </Link>
+            </NavLink>
           </Menu.Item>
           <Menu.Item key="3" icon={<IssuesCloseOutlined />}>
-            <Link to="/a/issues">
+            <NavLink to="/a/issues">
               <span>Incidentes</span>
-            </Link>
+            </NavLink>
           </Menu.Item>
           <Menu.Item key="4" icon={<BugOutlined />}>
-            <Link to="/a/bugs">
+            <NavLink to="/a/errors">
               <span>Errores</span>
-            </Link>
+            </NavLink>
           </Menu.Item>
           <Menu.Item key="5" icon={<LogoutOutlined />}>
             <Link to="/login">
@@ -86,7 +87,7 @@ const LayoutPage: FC = () => {
               <Route exact path="/a/issues" component={Issues}/>
               <Route exact path="/a/groups/:id" component={Members}/>
               <Route exact path="/a/groups" component={Groups}/>
-              <Route exact path="/a/bugs" component={Bugs}/>
+              <Route exact path="/a/errors" component={Errors}/>
               <Route exact path="/a" component={Dashboard}/>
             </Switch>
           </div>

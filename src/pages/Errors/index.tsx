@@ -11,26 +11,24 @@ import { StateIcon } from "./components/StateIcon";
 import { Filter } from "./components/Filter";
 import { Group } from '@services/Groups';
 import { User } from "@services/Members";
-import { Issue, IssueToSave } from '@services/Issues';
+import { Error, ErrorToSave } from '../../services/Errors';
 import { templateList } from "./issueTemplates";
 
-const Issues: React.FC = () => {
+const Errors: React.FC = () => {
 
   const { Search } = Input;
   const [text, setText] = React.useState<string>("");
   const [visibleDrawer, setVisibleDrawer] = React.useState<boolean>(false);
   const [projects, setProjects] = React.useState<Group[]>([]);
-  const [authors, setAuthors] = React.useState<User[]>([]);
   const [filter, setFilter] = React.useState({
-    authors: "TODOS",
     projects: "TODOS",
-    status: "OPEN"
+    status: "Pending"
   });
 
   const [form] = Form.useForm();
-  const { isLoading, data, isFetching } = useList(text);
+  const { isLoading, data, isFetching } = useList();
   const addIssue = useAdd();
-  const [filteredData, setFilteredData] = React.useState<Issue[] | undefined>([]);
+  const [filteredData, setFilteredData] = React.useState<Error[] | undefined>([]);
 
   const showDrawer = () => setVisibleDrawer(true);
   const onClose = () => setVisibleDrawer(false);
@@ -43,17 +41,13 @@ const Issues: React.FC = () => {
     setFilter({ ...filter, projects: value });
   }
 
-  const applyFilterAuthor = (value: string) => {
-    setFilter({ ...filter, authors: value });
-  }
-
   const applyFilterStatus = () => {
-    let status = filter.status === "OPEN" ? "CLOSED" : "OPEN";
+    let status = (filter.status === "Pending") ? "Resolved" : "Pending";
     setFilter({ ...filter, status });
     return status;
   }
 
-  const sendForm = (issue: IssueToSave) => {
+  const sendForm = (issue: ErrorToSave) => {
     return addIssue.mutateAsync(issue).then(() => {
       showSuccess("Incidente reportado.");
       onClose()
@@ -82,8 +76,6 @@ const Issues: React.FC = () => {
     if (data) {
       let groups = uniqueReducer<Group>(data.map((issue) => issue.group));
       setProjects(groups);
-      let authors = uniqueReducer<User>(data.map((issue) => issue.reporter));
-      setAuthors(authors);
     }
   }, [data]);
 
@@ -97,10 +89,7 @@ const Issues: React.FC = () => {
         issues = issues.filter((issue) => String(issue.group.id) !== filter.projects);
       }
 
-      if (filter.authors !== "TODOS") {
-        issues = issues.filter((issue) => String(issue.reporter.id) !== filter.authors);
-      }
-
+      console.log(filter.status);
       issues = issues.filter((issue) => issue.status === filter.status);
     }
 
@@ -141,10 +130,8 @@ const Issues: React.FC = () => {
                   <Filter
                     onChangeProject={applyFilterProject}
                     projects={projects}
-                    onChangeAuthor={applyFilterAuthor}
-                    authors={authors}
-                    open={data?.filter((issue) => issue.status === "OPEN").length}
-                    closed={data?.filter((issue) => issue.status === "CLOSED").length}
+                    open={data?.filter((error) => error.status === "Pending").length}
+                    closed={data?.filter((error) => error.status === "Resolved").length}
                     onChangeStatus={applyFilterStatus}
                   />
                 }
@@ -175,8 +162,7 @@ const Issues: React.FC = () => {
                             paddingRight: "5px"
                           }}
                           >
-                            abierto {toRelativeTime(record.created_at)} por </span>
-                          <PopOverUser user={record.reporter} />
+                            Abierto {toRelativeTime(record.created_at)} </span>
                         </div>
                       }
                     />
@@ -263,4 +249,4 @@ const Issues: React.FC = () => {
   );
 };
 
-export { Issues };
+export { Errors };

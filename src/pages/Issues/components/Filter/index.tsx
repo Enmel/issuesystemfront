@@ -38,16 +38,16 @@ const Filter: React.FC<Props> = ({onChangeProject, projects, onChangeAuthor, aut
         }
     }
 
-    const ButtonOpen = () => {
+    const ButtonOpen : React.FC<{status: string}> = ({status}) => {
         
         let button;
 
-        if(statusSelected === "OPEN") {
-
-            button = <Button icon={<ExclamationCircleTwoTone twoToneColor="#eb2f96"/>} type="ghost">Abiertas {open}</Button>;
+        if(status === "OPEN") {
+            button = <Button icon={<ExclamationCircleTwoTone twoToneColor="#eb2f96"/>} type="primary">Abiertas {open}</Button>;
+        }else{
+            button = <Button icon={<ExclamationCircleTwoTone twoToneColor="#eb2f96"/>} type="ghost" onClick={onChangeStatusCallback}>Abiertas {open}</Button>
         }
 
-        button = <Button icon={<ExclamationCircleTwoTone twoToneColor="#eb2f96"/>} onClick={onChangeStatusCallback}>Abiertas {open}</Button>
         return (
             <Tooltip title="Numero de incidencias pendientes">
                 {button}
@@ -55,15 +55,16 @@ const Filter: React.FC<Props> = ({onChangeProject, projects, onChangeAuthor, aut
         );
     }
 
-    const ButtonClosed = () => {
+    const ButtonClosed : React.FC<{status: string}> = ({status}) => {
 
         let button;
 
-        if(statusSelected === 'CLOSE') {
-            button = <Button icon={<CheckCircleTwoTone twoToneColor="#52c41a" />} type="ghost">Cerradas {closed}</Button>;
+        if(status === 'CLOSED') {
+            button = <Button icon={<CheckCircleTwoTone twoToneColor="#52c41a" />} type="primary">Cerradas {closed}</Button>;
+        }else{
+            button = <Button icon={<CheckCircleTwoTone twoToneColor="#52c41a" />} type="ghost" onClick={onChangeStatusCallback}>Cerradas {closed}</Button>
         }
-
-        button = <Button icon={<CheckCircleTwoTone twoToneColor="#52c41a" />} onClick={onChangeStatusCallback}>Cerradas {closed}</Button>
+        
         return (
             <Tooltip title="Numero de incidencias cerradas">
                 {button}
@@ -74,8 +75,8 @@ const Filter: React.FC<Props> = ({onChangeProject, projects, onChangeAuthor, aut
     return (
         <div style={{display: "flex", justifyContent:"space-between"}}>
             <div>
-                <ButtonOpen/>
-                <ButtonClosed/>
+                <ButtonOpen status={statusSelected}/>
+                <ButtonClosed status={statusSelected}/>
             </div>
             <Select
                 showSearch
