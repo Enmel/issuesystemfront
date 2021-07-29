@@ -44,7 +44,7 @@ const IssueDetail: React.FC = () => {
         
         return {
           author: comment.owner.name,
-          avatar: comment.owner.picture.url,
+          avatar: comment.owner.picture,
           content: comment.note,
           datetime: (
             <Tooltip title={comment.created_at}>
@@ -57,7 +57,7 @@ const IssueDetail: React.FC = () => {
       setComments(result);
       setCommentMain({
         author: firstComment?.owner.name,
-        avatar: firstComment?.owner.picture.url,
+        avatar: firstComment?.owner.picture,
         content: firstComment?.note,
         datetime: (
           <Tooltip title={firstComment?.created_at}>

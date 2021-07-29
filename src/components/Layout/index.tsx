@@ -69,7 +69,7 @@ const LayoutPage: React.FC = () => {
       >
         <Row align="middle" style={{height: "3rem"}}>
           <Col span={6} offset={2}>
-            <Avatar src={sessionData?.user?.picture_url} alt={sessionData?.user?.name}></Avatar>
+            <Avatar src={sessionData?.user?.picture} alt={sessionData?.user?.name}></Avatar>
           </Col>
           <Col span={16}>
             <Text style={{color: "white"}}>{sessionData?.user?.name}</Text>

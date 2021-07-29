@@ -104,7 +104,7 @@ const Members: React.FC = () => {
                           }
                         >
                           <List.Item.Meta
-                            avatar={<Avatar src={record.picture?.url ?? ""} />}
+                            avatar={<Avatar src={record.picture ?? ""} />}
                             title={record.name}
                             description={record.email}
                           />

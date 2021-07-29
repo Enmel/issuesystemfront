@@ -18,7 +18,7 @@ const PopOverUser: React.FC<Props> = ({user}) => {
             
             title={
                 <>
-                    <Avatar src={user?.picture.url}></Avatar> {user?.name}
+                    <Avatar src={user?.picture}></Avatar> {user?.name}
                 </>
             }
         >
