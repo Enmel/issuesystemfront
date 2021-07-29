@@ -8,7 +8,7 @@ interface Props {
 
 const PopOverUser: React.FC<Props> = ({user}) => {
 
-    const { Text, Link } = Typography;
+    const { Text } = Typography;
 
     return (
         <Popover 

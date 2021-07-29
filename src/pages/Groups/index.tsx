@@ -1,10 +1,13 @@
 import React from 'react';
-import { Button, List, Avatar, Input, Row, Col, Tooltip,  Drawer, Form, Popconfirm, Spin, message} from 'antd';
+import { Button, List, Avatar, Input, Row, Col, Tooltip,  Drawer, Form, Popconfirm, Spin, Typography, message} from 'antd';
 import { DeleteFilled, EditFilled, UsergroupAddOutlined, TeamOutlined } from '@ant-design/icons';
 import { UploadAvatar } from './components/UploadAvatar';
+import { Header} from "../../components/Header";
 import { Group, GroupToSave } from "@services/Groups";
 import { Link } from "react-router-dom";
 import { useList, useAdd, useUpdateUser, useRemoveUser } from "./hooks";
+
+const {Title} = Typography;
 
 const Groups: React.FC = () => {
 
@@ -87,6 +90,7 @@ const Groups: React.FC = () => {
 
     return (
         <>
+        <Header content={<Title level={3}>Grupos</Title>}></Header>
         <Row justify="center">
             <Col span={16}>
                 <Row>
@@ -120,6 +124,7 @@ const Groups: React.FC = () => {
                       loading={isFetching || isLoading}
                       renderItem={record => (
                         <List.Item
+                          style={{backgroundColor: "white", paddingRight:"0.7rem", paddingLeft:"0.7rem"}}
                           actions={
                             [
                               <Link to={"/a/groups/" + record.id}>

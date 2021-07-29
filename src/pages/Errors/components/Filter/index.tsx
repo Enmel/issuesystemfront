@@ -7,11 +7,12 @@ interface Props {
     onChangeProject?: (value : string) => void,
     projects?: Group[],
     onChangeStatus?: () => string,
+    onChangeType?: (value: string) => void
     open?: number,
     closed?: number
 }
 
-const Filter: React.FC<Props> = ({onChangeProject, projects, onChangeStatus, open, closed}) => {
+const Filter: React.FC<Props> = ({onChangeProject, projects, onChangeStatus, open, closed, onChangeType}) => {
 
     const [statusSelected, selectStatus] = React.useState<string>("Pending");
 
@@ -20,6 +21,12 @@ const Filter: React.FC<Props> = ({onChangeProject, projects, onChangeStatus, ope
     const onChangeProjectCallback = (value: string) => {
         if(onChangeProject){
             onChangeProject(value);
+        }
+    }
+
+    const onChangeTypeCallback = (value: string) => {
+        if(onChangeType){
+            onChangeType(value);
         }
     }
 
@@ -69,6 +76,20 @@ const Filter: React.FC<Props> = ({onChangeProject, projects, onChangeStatus, ope
             <ButtonOpen statusFilter={statusSelected}/>
             <ButtonClosed statusFilter={statusSelected}/>
             </div>
+            <Select
+                style={{ width: 200 }}
+                defaultValue="TODOS"
+                onChange={onChangeTypeCallback}
+                placeholder="Tipo"
+            >
+                <Option value="TODOS">Cualquier tipo</Option>
+                <Option value="Blocker">Bloqueante</Option>
+                <Option value="Critical">Critico</Option>
+                <Option value="Major">Mayor</Option>
+                <Option value="Normal">Normal</Option>
+                <Option value="Minor">Menor</Option>
+                <Option value="Trivial">Trivial</Option>
+            </Select>
             <Select
                 showSearch
                 style={{ width: 200 }}

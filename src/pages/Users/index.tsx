@@ -1,11 +1,13 @@
 import React from 'react';
-import { Button, Table, Input, Row, Col, Tooltip,  Drawer, Form, Select, Popconfirm, Spin, message} from 'antd';
+import { Button, Table, Input, Row, Col, Tooltip,  Drawer, Form, Select, Popconfirm, Spin, message, Typography} from 'antd';
 import { DeleteFilled, EditFilled, UserAddOutlined } from '@ant-design/icons';
 import { useAuth } from '@hooks/useAuth';
 import { UserParams } from "@services/Users"
 import { useGetUsers, useAddUser, useUpdateUser, useRemoveUser } from "./hooks";
+import { Header } from "@components/Header";
 import { User} from "@services/Login";
 
+const {Title} = Typography;
 
 const Users: React.FC = () => {
 
@@ -131,6 +133,7 @@ const Users: React.FC = () => {
 
     return (
         <>
+        <Header content={<Title level={3}>Usuarios</Title>}></Header>
         <Row justify="center">
             <Col span={16}>
                 <Row>

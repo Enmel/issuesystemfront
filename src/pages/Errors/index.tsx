@@ -1,33 +1,34 @@
 import React from 'react';
-import { Button, List, Input, Row, Col, Tooltip, Form, Drawer, Spin, Select, message } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { Button, List, Input, Row, Col, Tooltip, Form, Drawer, Spin, Select, Typography, message } from 'antd';
+import { ExclamationCircleOutlined} from '@ant-design/icons';
 import { toRelativeTime } from "@utils/timeago";
 import { uniqueReducer } from "@utils/uniqueReducer";
 import { Link } from "react-router-dom";
 import { useList, useAdd } from "./hooks";
-import { PopOverUser } from "./components/PopOverUser";
-import { PopOverGroup } from "./components/PopOverGroup";
+import { PopOverGroup} from '@components/Popover';
 import { StateIcon } from "./components/StateIcon";
 import { Filter } from "./components/Filter";
+import { ErrorTag } from "./components/ErrorTag";
+import { Header } from "../../components/Header"
 import { Group } from '@services/Groups';
-import { User } from "@services/Members";
 import { Error, ErrorToSave } from '../../services/Errors';
-import { templateList } from "./issueTemplates";
+import { templateList } from "./errorTemplates";
 
 const Errors: React.FC = () => {
 
   const { Search } = Input;
-  const [text, setText] = React.useState<string>("");
   const [visibleDrawer, setVisibleDrawer] = React.useState<boolean>(false);
   const [projects, setProjects] = React.useState<Group[]>([]);
   const [filter, setFilter] = React.useState({
     projects: "TODOS",
+    type: "TODOS",
     status: "Pending"
   });
 
+  const {Title} = Typography;
   const [form] = Form.useForm();
   const { isLoading, data, isFetching } = useList();
-  const addIssue = useAdd();
+  const addError = useAdd();
   const [filteredData, setFilteredData] = React.useState<Error[] | undefined>([]);
 
   const showDrawer = () => setVisibleDrawer(true);
@@ -41,15 +42,19 @@ const Errors: React.FC = () => {
     setFilter({ ...filter, projects: value });
   }
 
+  const applyFilterType = (value: string) => {
+    setFilter({ ...filter, type: value });
+  }
+
   const applyFilterStatus = () => {
     let status = (filter.status === "Pending") ? "Resolved" : "Pending";
     setFilter({ ...filter, status });
     return status;
   }
 
-  const sendForm = (issue: ErrorToSave) => {
-    return addIssue.mutateAsync(issue).then(() => {
-      showSuccess("Incidente reportado.");
+  const sendForm = (error: ErrorToSave) => {
+    return addError.mutateAsync(error).then(() => {
+      showSuccess("Error reportado.");
       onClose()
     });
   };
@@ -60,6 +65,7 @@ const Errors: React.FC = () => {
         comment: templateList.Ninguna
       });
     }
+    
     if (template === "Problema") {
       form.setFieldsValue({
         comment: templateList.Problema
@@ -81,24 +87,28 @@ const Errors: React.FC = () => {
 
   React.useEffect(() => {
 
-    let issues = data;
+    let errors = data;
 
-    if (issues) {
+    if (errors) {
 
       if (filter.projects !== "TODOS") {
-        issues = issues.filter((issue) => String(issue.group.id) !== filter.projects);
+        errors = errors.filter((errors) => String(errors.group.id) !== filter.projects);
       }
 
-      console.log(filter.status);
-      issues = issues.filter((issue) => issue.status === filter.status);
+      if (filter.type !== "TODOS") {
+        errors = errors.filter((errors) => String(errors.type) === filter.type);
+      }
+
+      errors = errors.filter((errors) => errors.status === filter.status);
     }
 
-    setFilteredData(issues);
+    setFilteredData(errors);
 
   }, [data, filter]);
 
   return (
     <>
+      <Header content={<Title level={3}>Errores</Title>}></Header>
       <Row justify="center">
         <Col span={16}>
           <Row>
@@ -106,7 +116,6 @@ const Errors: React.FC = () => {
               <Search
                 placeholder="Busqueda. Ejemplo: Incidente del boton fantasma"
                 loading={isFetching || isLoading}
-                onChange={(event) => { setText(event.target.value) }}
                 enterButton
                 style={{ paddingBottom: "2rem" }}
               />
@@ -133,13 +142,14 @@ const Errors: React.FC = () => {
                     open={data?.filter((error) => error.status === "Pending").length}
                     closed={data?.filter((error) => error.status === "Resolved").length}
                     onChangeStatus={applyFilterStatus}
+                    onChangeType={applyFilterType}
                   />
                 }
                 itemLayout="horizontal"
                 dataSource={filteredData}
                 loading={isFetching || isLoading}
                 renderItem={record => (
-                  <List.Item>
+                  <List.Item key={record.id} style={{backgroundColor: "white", paddingRight:"0.7rem", paddingLeft:"0.7rem"}}>
                     <List.Item.Meta
                       avatar={<StateIcon state={record.status} />}
                       title={
@@ -147,7 +157,10 @@ const Errors: React.FC = () => {
                           justifyContent: "space-between",
                           display: "flex"
                         }}>
-                          <Link to={"/a/issues/" + record.id}> {record.title} </Link>
+                          <div>
+                            <ErrorTag type={record.type}/>
+                            <Link to={"/a/errors/" + record.id}> {record.title}</Link>
+                          </div>
                           <PopOverGroup group={record.group} />
                         </div>
                       }
@@ -182,7 +195,7 @@ const Errors: React.FC = () => {
         destroyOnClose={true}
       >
         {
-          addIssue.isLoading ? <Spin></Spin> :
+          addError.isLoading ? <Spin></Spin> :
             <Form layout="vertical"
               form={form}
               onFinish={sendForm}
@@ -200,19 +213,19 @@ const Errors: React.FC = () => {
                 </Col>
               </Row>
               <Row gutter={16}>
-                <Col span={8}>
+                <Col span={6}>
                   <Form.Item
                     name="template"
                     label="Plantilla"
                   >
-                    <Select placeholder="Plantilla" defaultValue="Ninguna" onChange={onChangeTemplate}>
+                    <Select placeholder="Plantilla" onChange={onChangeTemplate}>
                       <Select.Option value="Ninguna">Ninguna</Select.Option>
                       <Select.Option value="Problema">Problema</Select.Option>
                       <Select.Option value="Peticion">Peticion</Select.Option>
                     </Select>
                   </Form.Item>
                 </Col>
-                <Col span={16}>
+                <Col span={12}>
                   <Form.Item
                     name="group"
                     label="Grupo"
@@ -220,6 +233,21 @@ const Errors: React.FC = () => {
                   >
                     <Select placeholder="Grupo">
                       {projects.map((project) => <Select.Option value={project.id}>{project.name}</Select.Option>)}
+                    </Select>
+                  </Form.Item>
+                </Col>
+                <Col span={6}>
+                  <Form.Item
+                    name="type"
+                    label="Tipo"
+                  >
+                    <Select placeholder="Plantilla" defaultValue="Normal">
+                      <Select.Option value="Blocker">Bloqueante</Select.Option>
+                      <Select.Option value="Critical">Critico</Select.Option>
+                      <Select.Option value="Major">Mayor</Select.Option>
+                      <Select.Option value="Normal">Normal</Select.Option>
+                      <Select.Option value="Minor">Menor</Select.Option>
+                      <Select.Option value="Trivial">Trivial</Select.Option>
                     </Select>
                   </Form.Item>
                 </Col>

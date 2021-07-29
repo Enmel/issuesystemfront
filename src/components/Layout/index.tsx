@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React from 'react';
 import './index.css';
 import { Layout, Menu, Avatar,  Typography, Row, Col } from 'antd';
 import {
@@ -12,7 +12,9 @@ import {
   Switch,
   Route,
   Link,
-  NavLink
+  NavLink,
+  useLocation,
+  matchPath
 } from "react-router-dom";
 import { Users } from "@pages/Users";
 import { Issues } from "@pages/Issues";
@@ -20,16 +22,40 @@ import { IssueDetail } from "@pages/IssueDetail";
 import { Groups } from "@pages/Groups";
 import { Members } from "@pages/Members";
 import { Errors } from "@pages/Errors";
+import { ErrorDetail } from "@pages/ErrorDetail";
 import { Dashboard } from "@pages/Dashboard";
 import { useAuth } from "@hooks/useAuth";
 
 const { Text } = Typography;
 const { Content, Footer, Sider } = Layout;
 
+const items = [
+  { key: '1', path: '/a/users' },
+  { key: '2', path: '/a/groups' },
+  { key: '3', path: '/a/issues' },
+  { key: '4', path: '/a/errors' },
+]
 
-const LayoutPage: FC = () => {
+const LayoutPage: React.FC = () => {
 
   const sessionData = useAuth();
+  const location = useLocation();
+  const [selectedKeys, setSelectedKeys] = React.useState<string>("");
+
+  React.useEffect(() => {
+
+    const getSelectedKey = () => (
+      Object.values(items).find((route) =>
+          matchPath(location.pathname, route)
+      ) || {}
+    ).key
+
+    const selectedKeysRaw = getSelectedKey();
+    const selectedKey = (selectedKeysRaw === undefined)? "3": selectedKeysRaw;
+    setSelectedKeys(selectedKey);
+
+  }, [location])
+
 
   return (
     <Layout>
@@ -50,7 +76,7 @@ const LayoutPage: FC = () => {
           </Col>
         </Row>
 
-        <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
+        <Menu theme="dark" mode="inline" defaultSelectedKeys={['3']} selectedKeys={[selectedKeys]}>
           <Menu.Item key="1" icon={<UserOutlined />}>
             <NavLink to="/a/users">
               <span>Usuarios</span>
@@ -79,14 +105,15 @@ const LayoutPage: FC = () => {
         </Menu>
       </Sider>
       <Layout className="site-layout" style={{ marginLeft: 200 }}>
-        <Content style={{ margin: '24px 16px 0', overflow: 'initial' }}>
+        <Content style={{ margin: '0 16px 0', overflow: 'initial' }}>
           <div className="site-layout-background" style={{ padding: 24, textAlign: 'center' }}>
             <Switch>
               <Route exact path="/a/users" component={Users}/>
-              <Route exact path="/a/issues/:id" component={IssueDetail}/>
+              <Route path="/a/issues/:id" component={IssueDetail}/>
               <Route exact path="/a/issues" component={Issues}/>
-              <Route exact path="/a/groups/:id" component={Members}/>
+              <Route path="/a/groups/:id" component={Members}/>
               <Route exact path="/a/groups" component={Groups}/>
+              <Route path="/a/errors/:id" component={ErrorDetail}/>
               <Route exact path="/a/errors" component={Errors}/>
               <Route exact path="/a" component={Dashboard}/>
             </Switch>

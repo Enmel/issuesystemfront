@@ -1,5 +1,5 @@
 import React from 'react';
-import { Popover, Avatar, Typography} from 'antd';
+import { Popover, Avatar } from 'antd';
 import { Link } from "react-router-dom";
 import {Group} from "@services/Groups";
 
@@ -8,8 +8,6 @@ interface Props {
 }
 
 const PopOverGroup: React.FC<Props> = ({group}) => {
-
-    const { Text } = Typography;
 
     return (
         <Popover 

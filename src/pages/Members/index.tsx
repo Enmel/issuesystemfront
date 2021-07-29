@@ -1,15 +1,19 @@
 import React from 'react';
-import { Button, List, Avatar, Row, Col, Tooltip,  Select, Popconfirm, message} from 'antd';
+import { Button, List, Avatar, Row, Col, Tooltip,  Select, Popconfirm, message, Typography, Spin} from 'antd';
 import { DeleteFilled, UsergroupAddOutlined } from '@ant-design/icons';
 import { useGetUsers } from "@pages/Users/hooks";
+import { Header } from "../../components/Header";
 import { useList, useAdd, useRemove } from "./hooks";
+import { useShow } from "../Groups/hooks/useShow";
 import { useParams } from "react-router-dom";
 
+const {Title} = Typography;
 
 const Members: React.FC = () => {
 
   let { id } = useParams<{id: string}>();
   const [selectedItems, setSelectedItems] = React.useState<number[]>([]);
+  const { isLoading : isLoadingGroup, data: group } = useShow(id);
   const { isLoading : isLoadingMembers, data: groupMembers, isFetching: isFetchingMembers } = useList(Number(id));
   const { isLoading : isLoadingUsers, data: users, isFetching: isFetchingUsers} = useGetUsers("");
   
@@ -41,6 +45,7 @@ const Members: React.FC = () => {
 
     return (
         <>
+        <Header content={isLoadingGroup? <Spin></Spin> : <Title level={3}>{group?.name}</Title>}></Header>
         <Row justify="center">
             <Col span={16}>
                 <Row>
@@ -89,6 +94,7 @@ const Members: React.FC = () => {
                       loading={isFetchingMembers || isLoadingMembers}
                       renderItem={record => (
                         <List.Item
+                          style={{backgroundColor: "white", paddingRight:"0.7rem", paddingLeft:"0.7rem"}}
                           actions={
                             [
                               <Popconfirm title="Confirme su operacion" onConfirm={() => handleDeleteUser(record.id)}>

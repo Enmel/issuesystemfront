@@ -29,6 +29,10 @@ const getGroups = async (params:getGroupsConfig): Promise<AxiosResponse<Group[]>
     return axios.get<Group[]>('/groups', params);
 }
 
+const getGroup = async (id: string): Promise<AxiosResponse> => {
+    return axios.get<Group>('/groups/' + id);
+}
+
 const createGroup = async (params:GroupToSave): Promise<AxiosResponse<Group>> => {
     return axios.post<Group>('/groups', params);
 }
@@ -41,4 +45,4 @@ const removeGroup = async (id: number): Promise<AxiosResponse> => {
     return axios.delete(`/groups/${id}`);
 }
 
-export {getGroups, createGroup, updateGroup, removeGroup};
+export {getGroups, getGroup, createGroup, updateGroup, removeGroup};

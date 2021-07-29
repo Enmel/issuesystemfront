@@ -15,6 +15,16 @@ export type Group = {
     picture : Picture
 }
 
+export type Comment = {
+    id: number,
+    note: string,
+    owner: User,
+    created_at: string,
+    updated_at: string
+}
+
+export type CommentType = Comment;
+
 export type Error = {
     id?: number,
     title: string,
@@ -31,11 +41,27 @@ export type ErrorToSave = {
     title: string,
     comment: string,
     group: number,
+    type: string
 }
 
 const getErrors = async (): Promise<AxiosResponse<Error[]>> => {
     return axios.get<Error[]>('/errors');
 }
 
+const getError = async (id: number): Promise<AxiosResponse<Error>> => {
+    return axios.get<Error>('/errors/' + id);
+}
 
-export {getErrors};
+const createError = async (data: ErrorToSave): Promise<AxiosResponse> => {
+    return axios.post('/errors', data);
+}
+
+const toggleState = async (id: number): Promise<AxiosResponse> => {
+    return axios.post('/errors/' + id + '/toggleState');
+}
+
+const addComment = async (id : number, comment: string):  Promise<AxiosResponse> => {
+    return axios.post('/errors/' + id + '/comment', {note: comment});
+}
+
+export {getErrors, getError, createError, toggleState, addComment};

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, List, Input, Row, Col, Tooltip, Form, Drawer, Spin, Select, message } from 'antd';
+import { Button, List, Input, Row, Col, Tooltip, Form, Drawer, Spin, Select, message, Typography } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { toRelativeTime } from "@utils/timeago";
 import { uniqueReducer } from "@utils/uniqueReducer";
@@ -9,6 +9,7 @@ import { PopOverUser } from "./components/PopOverUser";
 import { PopOverGroup } from "./components/PopOverGroup";
 import { StateIcon } from "./components/StateIcon";
 import { Filter } from "./components/Filter";
+import { Header } from "@components/Header";
 import { Group } from '@services/Groups';
 import { User } from "@services/Members";
 import { Issue, IssueToSave } from '@services/Issues';
@@ -16,6 +17,7 @@ import { templateList } from "./issueTemplates";
 
 const Issues: React.FC = () => {
 
+  const {Title} = Typography;
   const { Search } = Input;
   const [text, setText] = React.useState<string>("");
   const [visibleDrawer, setVisibleDrawer] = React.useState<boolean>(false);
@@ -110,6 +112,7 @@ const Issues: React.FC = () => {
 
   return (
     <>
+      <Header content={<Title level={3}>Incidentes</Title>}></Header>
       <Row justify="center">
         <Col span={16}>
           <Row>
@@ -152,7 +155,7 @@ const Issues: React.FC = () => {
                 dataSource={filteredData}
                 loading={isFetching || isLoading}
                 renderItem={record => (
-                  <List.Item>
+                  <List.Item key={record.id} style={{backgroundColor: "white", paddingRight:"0.7rem", paddingLeft:"0.7rem"}}>
                     <List.Item.Meta
                       avatar={<StateIcon state={record.status} />}
                       title={

@@ -1,13 +1,13 @@
 import { useQueryClient, useMutation } from "react-query";
-import {createIssue, IssueToSave} from "@services/Issues"
+import {createError, ErrorToSave} from "@services/Errors"
 
 export const useAdd = () => {
 
   const queryClient = useQueryClient();
 
-  return useMutation((issue : IssueToSave) => createIssue(issue), {
+  return useMutation((error : ErrorToSave) => createError(error), {
     onSuccess: () => {
-      queryClient.invalidateQueries("issues");
+      queryClient.invalidateQueries("errors");
     },
   });
 };
