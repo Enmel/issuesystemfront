@@ -1,7 +1,8 @@
 import React from 'react';
-import { Row, Col, Tooltip, Typography, List, Button, Form, Spin, message} from 'antd';
+import { Row, Col, Tooltip, Typography, List, Button, Form, Spin, Comment, message} from 'antd';
 import { useParams } from "react-router-dom";
 import { useShow, useToggleIssue, useAddComment } from "./hooks";
+import { useAuth } from "@hooks/useAuth";
 import { ToggleButton } from "./components/ToggleButton";
 import { PopOverGroup, PopOverUser} from '@components/Popover';
 import { Header } from "@components/Header"
@@ -34,7 +35,8 @@ const IssueDetail: React.FC = () => {
     }|undefined>(undefined);
     const [commentText, setCommentText] = React.useState<string>("");
     const addCommentMutation = useAddComment(Number(id));
-    const editor = React.useRef(null);
+    const editor = React.useRef<JoditEditor>(null);
+    const sessionData = useAuth();
 
     React.useEffect(() => {
 
@@ -147,19 +149,28 @@ const IssueDetail: React.FC = () => {
         <Row style={{paddingTop: "2rem"}}>
             <Col span={4}> 
             </Col>
-            <Col span={16}> 
-              <Form.Item>
-                <JoditEditor
-                  ref={editor}
-                  value={commentText}
-                  onBlur={newContent => setCommentText(newContent)}
+            <Col span={16}>
+              <Comment
+                  avatar={
+                    sessionData.user?.picture
+                  }
+                  content={
+                    <>
+                      <Form.Item>
+                        <JoditEditor
+                          ref={editor}
+                          value={commentText}
+                          onBlur={newContent => setCommentText(newContent)}
+                        />
+                      </Form.Item>
+                      <Form.Item>
+                        <Button htmlType="submit" loading={addCommentMutation.isLoading} onClick={handleSubmit} type="primary">
+                          Comentar
+                        </Button>
+                      </Form.Item>
+                    </>
+                  }
                 />
-              </Form.Item>
-              <Form.Item>
-                <Button htmlType="submit" loading={addCommentMutation.isLoading} onClick={handleSubmit} type="primary">
-                  Comentar
-                </Button>
-              </Form.Item>
             </Col>
             <Col span={4}> 
             </Col>

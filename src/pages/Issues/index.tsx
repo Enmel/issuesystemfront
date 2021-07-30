@@ -13,6 +13,7 @@ import { Group } from '@services/Groups';
 import { User } from "@services/Members";
 import { Issue, IssueToSave } from '@services/Issues';
 import { templateList } from "./issueTemplates";
+import JoditEditor from "jodit-react";
 
 const Issues: React.FC = () => {
 
@@ -31,6 +32,7 @@ const Issues: React.FC = () => {
   const [form] = Form.useForm();
   const { isLoading, data, isFetching } = useList(text);
   const addIssue = useAdd();
+  const editor = React.useRef<JoditEditor>(null);
   const [filteredData, setFilteredData] = React.useState<Issue[] | undefined>([]);
 
   const showDrawer = () => setVisibleDrawer(true);
@@ -246,7 +248,13 @@ const Issues: React.FC = () => {
                     label="Descripcion"
                     name="comment"
                   >
-                    <Input.TextArea autoComplete="off" rows={2} />
+                    <JoditEditor
+                      ref={editor}
+                      value={form.getFieldsValue().comment}
+                      onBlur={newContent => form.setFieldsValue({
+                        comment: newContent
+                      })}
+                    />
                   </Form.Item>
                 </Col>
               </Row>

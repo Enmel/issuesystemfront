@@ -11,6 +11,7 @@ import { Filter } from "./components/Filter";
 import { ErrorTag } from "./components/ErrorTag";
 import { Header } from "../../components/Header"
 import { Group } from '@services/Groups';
+import JoditEditor from "jodit-react";
 import { Error, ErrorToSave } from '../../services/Errors';
 import { templateList } from "./errorTemplates";
 
@@ -30,6 +31,7 @@ const Errors: React.FC = () => {
   const { isLoading, data, isFetching } = useList();
   const addError = useAdd();
   const [filteredData, setFilteredData] = React.useState<Error[] | undefined>([]);
+  const editor = React.useRef<JoditEditor>(null);
 
   const showDrawer = () => setVisibleDrawer(true);
   const onClose = () => setVisibleDrawer(false);
@@ -199,6 +201,7 @@ const Errors: React.FC = () => {
             <Form layout="vertical"
               form={form}
               onFinish={sendForm}
+              initialValues={{type: "Normal"}}
               hideRequiredMark
             >
               <Row gutter={16}>
@@ -258,7 +261,13 @@ const Errors: React.FC = () => {
                     label="Descripcion"
                     name="comment"
                   >
-                    <Input.TextArea autoComplete="off" rows={2} />
+                    <JoditEditor
+                      ref={editor}
+                      value={form.getFieldsValue().comment}
+                      onBlur={newContent => form.setFieldsValue({
+                        comment: newContent
+                      })}
+                    />
                   </Form.Item>
                 </Col>
               </Row>

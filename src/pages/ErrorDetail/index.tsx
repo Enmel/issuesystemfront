@@ -2,6 +2,7 @@ import React from 'react';
 import { Row, Col, Tooltip, Typography, Comment, List, Button, Form, Spin, message} from 'antd';
 import { useParams } from "react-router-dom";
 import { useShow, useToggleError, useAddComment } from "./hooks";
+import { useAuth } from "@hooks/useAuth";
 import { ToggleButton } from './components/ToggleButton';
 import { PopOverGroup, PopOverUser} from '@components/Popover';
 import { toRelativeTime } from "@utils/timeago";
@@ -34,7 +35,8 @@ const ErrorDetail: React.FC = () => {
     }|undefined>(undefined);
     const [commentText, setCommentText] = React.useState<string>("");
     const addCommentMutation = useAddComment(Number(id));
-    const editor = React.useRef(null);
+    const editor = React.useRef<JoditEditor>(null);
+    const sessionData = useAuth();
 
     React.useEffect(() => {
 
@@ -149,7 +151,7 @@ const ErrorDetail: React.FC = () => {
             <Col span={16}>
               <Comment
                   avatar={
-                    commentMain?.avatar
+                    sessionData.user?.picture
                   }
                   content={
                     <>
