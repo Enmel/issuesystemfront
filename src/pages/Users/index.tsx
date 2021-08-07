@@ -139,7 +139,8 @@ const Users: React.FC = () => {
                 <Row>
                     <Col span={20}>
                         <Search 
-                            placeholder="introduzca e-mail o nombre" 
+                            placeholder="introduzca e-mail o nombre"
+                            className="search-box"
                             loading={isFetching || isLoading}
                             onChange={(event) => {setEmail(event.target.value)}} 
                             enterButton

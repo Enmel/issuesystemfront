@@ -120,6 +120,7 @@ const Issues: React.FC = () => {
             <Col span={20}>
               <Search
                 placeholder="Busqueda. Ejemplo: Incidente del boton fantasma"
+                className="search-box"
                 loading={isFetching || isLoading}
                 onChange={(event) => { setText(event.target.value) }}
                 enterButton

@@ -96,7 +96,8 @@ const Groups: React.FC = () => {
                 <Row>
                     <Col span={20}>
                         <Search 
-                            placeholder="¿Que producto busca?" 
+                            placeholder="¿Que producto busca?"
+                            className="search-box"
                             loading={isFetching || isLoading}
                             onChange={(event) => {setText(event.target.value)}} 
                             enterButton

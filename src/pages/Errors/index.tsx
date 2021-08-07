@@ -118,6 +118,7 @@ const Errors: React.FC = () => {
               <Search
                 placeholder="Busqueda. Ejemplo: Incidente del boton fantasma"
                 loading={isFetching || isLoading}
+                className="search-box"
                 enterButton
                 style={{ paddingBottom: "2rem" }}
               />
