@@ -5,6 +5,7 @@ import { UploadAvatar } from './components/UploadAvatar';
 import { Header} from "../../components/Header";
 import { Group, GroupToSave } from "@services/Groups";
 import { Link } from "react-router-dom";
+import { useAuth } from '@/hooks/useAuth';
 import { useList, useAdd, useUpdateUser, useRemoveUser } from "./hooks";
 
 const {Title} = Typography;
@@ -15,6 +16,9 @@ const Groups: React.FC = () => {
     const [text, setText] = React.useState<string>("");
     const [visibleDrawer, setVisibleDrawer] = React.useState<boolean>(false);
     const [form] = Form.useForm();
+    const user = useAuth().user;
+
+    const isAdmin = (user?.role === "Admin" || user?.role === "SuperAdmin");
 
     const drawerConfigCreate = {
       title: "Crear nuevo usuario",
@@ -65,9 +69,9 @@ const Groups: React.FC = () => {
           id: record.id,
           name: record.name,
           description: record.description,
-          picture: record.picture.id
+          picture: record?.picture?.id
         },
-        picture_url: record.picture.url,
+        picture_url: record?.picture?.url,
         actionButton: "Editar",
       });
       showDrawer();
@@ -93,6 +97,7 @@ const Groups: React.FC = () => {
         <Header content={<Title level={3}>Grupos</Title>}></Header>
         <Row justify="center">
             <Col span={16}>
+
                 <Row>
                     <Col span={20}>
                         <Search 
@@ -110,13 +115,14 @@ const Groups: React.FC = () => {
                                 type="primary"
                                 onClick={showDrawerCreate} 
                                 icon={<UsergroupAddOutlined className="standar-icon"/>}
-                                disabled={addGroup.isLoading || updateGroup.isLoading }
+                                disabled={addGroup.isLoading || updateGroup.isLoading || !isAdmin }
                             >
                               Agregar
                             </Button>
                         </Tooltip>
                     </Col>
                 </Row>
+                
                 <Row>
                     <Col span={24}>
                     <List
@@ -128,17 +134,24 @@ const Groups: React.FC = () => {
                           style={{backgroundColor: "white", paddingRight:"0.7rem", paddingLeft:"0.7rem"}}
                           actions={
                             [
-                              <Link to={"/a/groups/" + record.id}>
-                                <Button type="text" icon={<TeamOutlined/>}/>
-                              </Link>,
-                              <Button
-                                type="text"
-                                icon={<EditFilled />}
-                                onClick={() => handleEditUser(record)}
-                              />,
-                              <Popconfirm title="Confirme su operacion" onConfirm={() => handleDeleteUser(record.id)}>
-                                <Button type="text" icon={<DeleteFilled/>}></Button>
-                              </Popconfirm>
+                              <Tooltip title="Miembros">
+                                <Link to={"/a/groups/" + record.id}>
+                                  <Button type="text" icon={<TeamOutlined/>}/>
+                                </Link>
+                              </Tooltip>,
+                              <Tooltip title="Editar">
+                                <Button
+                                  type="text"
+                                  icon={<EditFilled />}
+                                  disabled={!isAdmin}
+                                  onClick={() => handleEditUser(record)}
+                                />
+                              </Tooltip>,
+                              <Tooltip title="Eliminar">
+                                <Popconfirm title="Confirme su operacion" disabled={!isAdmin} onConfirm={() => handleDeleteUser(record.id)}>
+                                  <Button type="text" disabled={!isAdmin} icon={<DeleteFilled/>}></Button>
+                                </Popconfirm>
+                              </Tooltip>
                             ]
                           }
                         >

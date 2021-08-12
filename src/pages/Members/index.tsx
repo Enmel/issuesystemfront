@@ -6,6 +6,7 @@ import { Header } from "../../components/Header";
 import { useList, useAdd, useRemove } from "./hooks";
 import { useShow } from "../Groups/hooks/useShow";
 import { useParams } from "react-router-dom";
+import { useAuth } from '@/hooks/useAuth';
 
 const {Title} = Typography;
 
@@ -13,6 +14,8 @@ const Members: React.FC = () => {
 
   let { id } = useParams<{id: string}>();
   const [selectedItems, setSelectedItems] = React.useState<number[]>([]);
+  const user = useAuth().user;
+  const isAdmin = (user?.role === "Admin" || user?.role === "SuperAdmin");
   const { isLoading : isLoadingGroup, data: group } = useShow(id);
   const { isLoading : isLoadingMembers, data: groupMembers, isFetching: isFetchingMembers } = useList(Number(id));
   const { isLoading : isLoadingUsers, data: users, isFetching: isFetchingUsers} = useGetUsers("");
@@ -48,6 +51,8 @@ const Members: React.FC = () => {
         <Header content={isLoadingGroup? <Spin></Spin> : <Title level={3}>{group?.name}</Title>}></Header>
         <Row justify="center">
             <Col span={16}>
+              {
+                isAdmin && 
                 <Row>
                     <Col span={20}>
                     <Select
@@ -86,6 +91,8 @@ const Members: React.FC = () => {
                         </Tooltip>
                     </Col>
                 </Row>
+              }
+                
                 <Row style={{marginTop: "1rem"}}>
                     <Col span={24}>
                     <List
@@ -97,9 +104,11 @@ const Members: React.FC = () => {
                           style={{backgroundColor: "white", paddingRight:"0.7rem", paddingLeft:"0.7rem"}}
                           actions={
                             [
-                              <Popconfirm title="Confirme su operacion" onConfirm={() => handleDeleteUser(record.id)}>
-                                <Button type="text" icon={<DeleteFilled/>}></Button>
-                              </Popconfirm>
+                              <Tooltip title="Expulsar">
+                                <Popconfirm disabled={!isAdmin} title="Confirme su operacion" onConfirm={() => handleDeleteUser(record.id)}>
+                                  <Button disabled={!isAdmin} type="text" icon={<DeleteFilled/>}></Button>
+                                </Popconfirm>
+                              </Tooltip>
                             ]
                           }
                         >

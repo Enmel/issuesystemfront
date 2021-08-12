@@ -4,6 +4,7 @@ import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { toRelativeTime } from "@utils/timeago";
 import { uniqueReducer } from "@utils/uniqueReducer";
 import { Link } from "react-router-dom";
+import * as GroupHooks from "../Groups/hooks";
 import { useList, useAdd } from "./hooks";
 import { PopOverGroup, PopOverUser} from '@components/Popover';
 import { StateIcon } from "./components/StateIcon";
@@ -31,6 +32,7 @@ const Issues: React.FC = () => {
 
   const [form] = Form.useForm();
   const { isLoading, data, isFetching } = useList(text);
+  const { isLoading: loadingUserProjects, data: userProjects, isFetching: fetchinUserProjects } = GroupHooks.useList("");
   const addIssue = useAdd();
   const editor = React.useRef<JoditEditor>(null);
   const [filteredData, setFilteredData] = React.useState<Issue[] | undefined>([]);
@@ -237,8 +239,8 @@ const Issues: React.FC = () => {
                     label="Grupo"
                     rules={[{ required: true, message: 'Debe seleccionar un grupo' }]}
                   >
-                    <Select placeholder="Grupo">
-                      {projects.map((project) => <Select.Option value={project.id}>{project.name}</Select.Option>)}
+                    <Select placeholder="Grupo" loading={loadingUserProjects || fetchinUserProjects}>
+                      {userProjects?.map((project) => <Select.Option value={project.id}>{project.name}</Select.Option>)}
                     </Select>
                   </Form.Item>
                 </Col>
