@@ -12,7 +12,7 @@ interface Props {
     closed?: number
 }
 
-const Filter: React.FC<Props> = ({onChangeProject, projects, onChangeStatus, open, closed, onChangeType}) => {
+const Filter: React.FC<Props> = ({onChangeProject, projects, onChangeStatus, open  = 0, closed = 0, onChangeType}) => {
 
     const [statusSelected, selectStatus] = React.useState<string>("Pending");
 

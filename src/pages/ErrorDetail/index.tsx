@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { useShow, useToggleError, useAddComment } from "./hooks";
 import { useAuth } from "@hooks/useAuth";
 import { ToggleButton } from './components/ToggleButton';
+import { StateIcon } from "./components/StateIcon";
 import { PopOverGroup, PopOverUser} from '@components/Popover';
 import { toRelativeTime } from "@utils/timeago";
 import { Header } from "@components/Header"
@@ -93,7 +94,13 @@ const ErrorDetail: React.FC = () => {
     
     return (
         <>
-        <Header content={<Title level={3}>#{data?.id} {data?.title}</Title>}></Header>
+          <Header content={
+            <Title level={3}>
+              <StateIcon state={data?.status ?? 'OPEN'} style={{paddingRight: "1rem"}}/>
+              #{data?.id} {data?.title}
+            </Title>
+          }>
+          </Header>
         <Row justify="center">
             <Col span={16}>
                 <Row align="middle">

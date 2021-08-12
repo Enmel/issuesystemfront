@@ -14,7 +14,7 @@ interface Props {
     closed?: number
 }
 
-const Filter: React.FC<Props> = ({onChangeProject, projects, onChangeAuthor, authors, onChangeStatus, open, closed}) => {
+const Filter: React.FC<Props> = ({onChangeProject, projects, onChangeAuthor, authors, onChangeStatus, open = 0, closed = 0}) => {
 
     const [statusSelected, selectStatus] = React.useState<string>("OPEN");
 

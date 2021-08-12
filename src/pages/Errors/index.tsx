@@ -19,6 +19,7 @@ import { templateList } from "./errorTemplates";
 const Errors: React.FC = () => {
 
   const { Search } = Input;
+  const [text, setText] = React.useState<string>("");
   const [visibleDrawer, setVisibleDrawer] = React.useState<boolean>(false);
   const [projects, setProjects] = React.useState<Group[]>([]);
   const [filter, setFilter] = React.useState({
@@ -29,7 +30,7 @@ const Errors: React.FC = () => {
 
   const {Title} = Typography;
   const [form] = Form.useForm();
-  const { isLoading, data, isFetching } = useList();
+  const { isLoading, data, isFetching } = useList(text);
   const { isLoading: loadingUserProjects, data: userProjects, isFetching: fetchinUserProjects } = GroupHooks.useList("");
   const addError = useAdd();
   const [filteredData, setFilteredData] = React.useState<Error[] | undefined>([]);
@@ -96,11 +97,11 @@ const Errors: React.FC = () => {
     if (errors) {
 
       if (filter.projects !== "TODOS") {
-        errors = errors.filter((errors) => String(errors.group.id) !== filter.projects);
+        errors = errors.filter((errors) => String(errors.group.id) === String(filter.projects));
       }
 
       if (filter.type !== "TODOS") {
-        errors = errors.filter((errors) => String(errors.type) === filter.type);
+        errors = errors.filter((errors) => String(errors.type) === String(filter.type));
       }
 
       errors = errors.filter((errors) => errors.status === filter.status);
@@ -112,29 +113,35 @@ const Errors: React.FC = () => {
 
   return (
     <>
-      <Header content={<Title level={3}>Errores</Title>}></Header>
+      <Header content={
+        <div style={{justifyContent:"space-between", display: "flex", width: "100%"}}>
+          <Title level={3}>
+            Errores
+          </Title>
+          <Tooltip title="Reportar errorr">
+            <Button
+              type="primary"
+              icon={<ExclamationCircleOutlined className="standar-icon" />}
+              onClick={showDrawer}
+            >
+              Reportar
+            </Button>
+          </Tooltip>
+        </div>
+      }>
+      </Header>
       <Row justify="center">
         <Col span={16}>
           <Row>
-            <Col span={20}>
+            <Col span={24}>
               <Search
                 placeholder="Busqueda. Ejemplo: Incidente del boton fantasma"
                 loading={isFetching || isLoading}
+                onChange={(event) => { setText(event.target.value) }}
                 className="search-box"
                 enterButton
                 style={{ paddingBottom: "2rem" }}
               />
-            </Col>
-            <Col span={4}>
-              <Tooltip title="Crear incidencia">
-                <Button
-                  type="primary"
-                  icon={<ExclamationCircleOutlined className="standar-icon" />}
-                  onClick={showDrawer}
-                >
-                  Reportar
-                </Button>
-              </Tooltip>
             </Col>
           </Row>
           <Row justify="start">
@@ -247,7 +254,7 @@ const Errors: React.FC = () => {
                     name="type"
                     label="Tipo"
                   >
-                    <Select placeholder="Plantilla" defaultValue="Normal">
+                    <Select placeholder="Plantilla">
                       <Select.Option value="Blocker">Bloqueante</Select.Option>
                       <Select.Option value="Critical">Critico</Select.Option>
                       <Select.Option value="Major">Mayor</Select.Option>

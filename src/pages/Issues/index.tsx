@@ -99,11 +99,12 @@ const Issues: React.FC = () => {
     if (issues) {
 
       if (filter.projects !== "TODOS") {
-        issues = issues.filter((issue) => String(issue.group.id) !== filter.projects);
+        issues = issues.filter((issue) => String(issue.group.id) === String(filter.projects));
       }
 
       if (filter.authors !== "TODOS") {
-        issues = issues.filter((issue) => String(issue.reporter.id) !== filter.authors);
+        console.log(issues, filter.authors);
+        issues = issues.filter((issue) => String(issue.reporter.id) === String(filter.authors));
       }
 
       issues = issues.filter((issue) => issue.status === filter.status);
@@ -115,11 +116,27 @@ const Issues: React.FC = () => {
 
   return (
     <>
-      <Header content={<Title level={3}>Incidentes</Title>}></Header>
+      <Header content={
+        <div style={{justifyContent:"space-between", display: "flex", width: "100%"}}>
+          <Title level={3}>
+            Incidentes
+          </Title>
+          <Tooltip title="Reportar incidencia">
+            <Button
+              type="primary"
+              icon={<ExclamationCircleOutlined className="standar-icon" />}
+              onClick={showDrawer}
+            >
+              Reportar
+            </Button>
+          </Tooltip>
+        </div>
+      }>
+      </Header>
       <Row justify="center">
         <Col span={16}>
           <Row>
-            <Col span={20}>
+            <Col span={24}>
               <Search
                 placeholder="Busqueda. Ejemplo: Incidente del boton fantasma"
                 className="search-box"
@@ -128,17 +145,6 @@ const Issues: React.FC = () => {
                 enterButton
                 style={{ paddingBottom: "2rem" }}
               />
-            </Col>
-            <Col span={4}>
-              <Tooltip title="Crear incidencia">
-                <Button
-                  type="primary"
-                  icon={<ExclamationCircleOutlined className="standar-icon" />}
-                  onClick={showDrawer}
-                >
-                  Reportar
-                </Button>
-              </Tooltip>
             </Col>
           </Row>
           <Row justify="start">
@@ -207,6 +213,7 @@ const Issues: React.FC = () => {
             <Form layout="vertical"
               form={form}
               onFinish={sendForm}
+              initialValues={{tempate: "Ninguna"}}
               hideRequiredMark
             >
               <Row gutter={16}>
@@ -226,7 +233,7 @@ const Issues: React.FC = () => {
                     name="template"
                     label="Plantilla"
                   >
-                    <Select placeholder="Plantilla" defaultValue="Ninguna" onChange={onChangeTemplate}>
+                    <Select placeholder="Plantilla" onChange={onChangeTemplate}>
                       <Select.Option value="Ninguna">Ninguna</Select.Option>
                       <Select.Option value="Problema">Problema</Select.Option>
                       <Select.Option value="Peticion">Peticion</Select.Option>
@@ -240,7 +247,7 @@ const Issues: React.FC = () => {
                     rules={[{ required: true, message: 'Debe seleccionar un grupo' }]}
                   >
                     <Select placeholder="Grupo" loading={loadingUserProjects || fetchinUserProjects}>
-                      {userProjects?.map((project) => <Select.Option value={project.id}>{project.name}</Select.Option>)}
+                      {userProjects?.map((project) => <Select.Option key={project.id} value={project.id}>{project.name}</Select.Option>)}
                     </Select>
                   </Form.Item>
                 </Col>

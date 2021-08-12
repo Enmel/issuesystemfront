@@ -44,8 +44,12 @@ export type ErrorToSave = {
     type: string
 }
 
-const getErrors = async (): Promise<AxiosResponse<Error[]>> => {
-    return axios.get<Error[]>('/errors');
+export type getErrorsParam = {
+    params: {text: string}
+}
+
+const getErrors = async (params:getErrorsParam): Promise<AxiosResponse<Error[]>> => {
+    return axios.get<Error[]>('/errors', params);
 }
 
 const getError = async (id: number): Promise<AxiosResponse<Error>> => {
