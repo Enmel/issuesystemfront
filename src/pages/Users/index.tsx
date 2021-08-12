@@ -16,7 +16,7 @@ const Users: React.FC = () => {
     const { user } = useAuth();
     const [email, setEmail] = React.useState<string>("");
     const [visibleDrawer, setVisibleDrawer] = React.useState<boolean>(false);
-
+    const isAdmin = (user?.role === "Admin" || user?.role === "SuperAdmin");
     const drawerConfigCreate = {
       title: "Crear nuevo usuario",
       initialValue: {
@@ -119,11 +119,12 @@ const Users: React.FC = () => {
               <Button
                 type="text"
                 icon={<EditFilled />}
+                disabled={!isAdmin}
                 onClick={() => handleEditUser(record)}
               >
               </Button>
-              <Popconfirm title="Confirme su operacion" onConfirm={() => handleDeleteUser(record.id)}>
-                <Button type="text" icon={<DeleteFilled/>}></Button>
+              <Popconfirm title="Confirme su operacion" disabled={!isAdmin} onConfirm={() => handleDeleteUser(record.id)}>
+                <Button type="text" disabled={!isAdmin} icon={<DeleteFilled/>}></Button>
               </Popconfirm>
             </>
           );
@@ -153,7 +154,7 @@ const Users: React.FC = () => {
                                 type="primary"
                                 onClick={showDrawerCreate} 
                                 icon={<UserAddOutlined className="standar-icon"/>}
-                                disabled={addUser.isLoading || updateUser.isLoading }
+                                disabled={addUser.isLoading || updateUser.isLoading || !isAdmin}
                             >
                               Agregar
                             </Button>

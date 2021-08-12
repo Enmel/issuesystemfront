@@ -72,7 +72,11 @@ const ErrorDetail: React.FC = () => {
 
     const handleCloseError = () => {
       toggleError.mutateAsync().then(() => {
-        showSuccess("Error marcado como resuelto");
+        if(data?.status === "Pending") {
+          showSuccess("Error marcado como resuelto");
+        }else{
+          showSuccess("Error marcado como pendiente");
+        }
       });
     }
 

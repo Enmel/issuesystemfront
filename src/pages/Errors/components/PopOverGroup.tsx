@@ -13,7 +13,7 @@ const PopOverGroup: React.FC<Props> = ({group}) => {
         <Popover 
             content={
                 <>
-                <Avatar src={group?.picture.url}></Avatar> <span>{group?.name}</span>
+                <Avatar src={group?.picture?.url}></Avatar> <span>{group?.name}</span>
                 </>
             }
         >

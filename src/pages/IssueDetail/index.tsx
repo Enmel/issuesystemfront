@@ -3,6 +3,7 @@ import { Row, Col, Tooltip, Typography, List, Button, Form, Spin, Comment, messa
 import { useParams } from "react-router-dom";
 import { useShow, useToggleIssue, useAddComment } from "./hooks";
 import { useAuth } from "@hooks/useAuth";
+import { StateIcon } from "./components/StateIcon";
 import { ToggleButton } from "./components/ToggleButton";
 import { PopOverGroup, PopOverUser} from '@components/Popover';
 import { Header } from "@components/Header"
@@ -73,7 +74,11 @@ const IssueDetail: React.FC = () => {
     const handleCloseIssue = () => {
       toggleIssue.mutateAsync().then(() => {
         setCommentText("");
-        showSuccess("Incidente cerrado");
+        if(data?.status !== "OPEN") {
+          showSuccess("Incidente abierto");
+        }else{
+          showSuccess("Incidente cerrado");
+        }
       });
     }
 
@@ -90,7 +95,13 @@ const IssueDetail: React.FC = () => {
     
     return (
         <>
-        <Header content={<Title level={3}>#{data?.id} {data?.title}</Title>}></Header>
+        <Header content={
+          <Title level={3}>
+            <StateIcon state={data?.status ?? 'OPEN'} style={{paddingRight: "1rem"}}/>
+            #{data?.id} {data?.title}
+          </Title>
+        }>
+        </Header>
         <Row justify="center">
             <Col span={16}>
                 <Row align="middle">

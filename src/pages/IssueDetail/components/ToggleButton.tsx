@@ -12,19 +12,23 @@ const ToggleButton: React.FC<Props> = ({state, loading, handleClose}) => {
 
     if(state !== "OPEN") {
         return (
-            <Button 
-                type="ghost"
-                disabled
-                icon={<ExclamationCircleOutlined className="standar-icon"/>}
+            <Popconfirm 
+                title="Esta accion marcara la incidencia como abierta"                        
+                onConfirm={() => {handleClose()}}
             >
-                Cerrado
-            </Button>
+                <Button 
+                    type="primary"
+                    icon={<ExclamationCircleOutlined className="standar-icon"/>}
+                >
+                    Abrir
+                </Button>
+            </Popconfirm>
         );
     }
 
     return (
         <Popconfirm 
-            title="Esta accion cerrara la entrada y evitara comentarios futuros sobre ella"                        
+            title="Esta accion marcara la incidencia como cerrada"                        
             onConfirm={() => {handleClose()}}
         >
             <Button 

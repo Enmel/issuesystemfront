@@ -1,6 +1,6 @@
 import React from 'react';
 import { Popover, Avatar, Typography} from 'antd';
-import { User} from "@services/Members";
+import { User} from "../../../services/Members";
 
 interface Props {
     user?: User
@@ -18,7 +18,7 @@ const PopOverUser: React.FC<Props> = ({user}) => {
             
             title={
                 <>
-                    <Avatar src={user?.picture.url}></Avatar> {user?.name}
+                    <Avatar src={user?.picture}></Avatar> {user?.name}
                 </>
             }
         >
